@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.wurmonline.mapgenerator.core.MapTest;
 import com.wurmonline.mapgenerator.core.context.AppModule;
 import com.wurmonline.mesh.Tiles.Tile;
 import com.wurmonline.wurmapi.api.MapData;
@@ -23,7 +22,7 @@ public class Map {
 	            api = WurmAPI.create(path, size);
 	            data = api.getMapData();
 	        } catch (IOException ex) {
-	            Logger.getLogger(MapTest.class.getName()).log(Level.SEVERE, null, ex);
+	            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
 	        }
 	}
 	
@@ -37,6 +36,14 @@ public class Map {
 				data.setSurfaceTile(i, j, Tile.TILE_GRASS, height);
 				data.setRockHeight(i, j, rockHeight);
 			}
+	}
+	
+	public void terrain(float[][] input, Tile tile)
+	{
+		for(int i=0; i<input.length; i++)
+			for(int j=0; j< input.length; j++)
+				if(input[i][j] !=0)
+					data.setSurfaceTile(i,j,tile,data.getSurfaceHeight(i, j));
 	}
 	
 	public void save()

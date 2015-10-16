@@ -36,8 +36,9 @@ public class Interpreter {
 	
 	public void init()
 	{
-		System.out.println(exec("from com.wurmonline.mapgenerator.ui import Application;"));
-		System.out.println(exec("ui = Application.window;"));
+		exec("from com.wurmonline.mapgenerator.ui import Application;");
+		exec("ui = Application.window;");
+		exec("from com.wurmonline.mesh.Tiles import Tile");
 	}
 	
 }

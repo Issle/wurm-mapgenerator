@@ -7,13 +7,28 @@
 		<version>0.1.0</version>
 	</parent>
 	<artifactId>wurm-mapgenerator-wurmapi</artifactId>
+	<repositories>
+		<repository>
+			<id>my</id>
+			<url>file://${basedir}/my-repo</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>com.wurmonline</groupId>
-			<artifactId>wurmapi</artifactId>
+			<artifactId>wurm-commons</artifactId>
 			<version>1.0.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/common.jar</systemPath>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
