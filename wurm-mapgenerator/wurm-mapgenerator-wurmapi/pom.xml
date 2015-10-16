@@ -10,7 +10,7 @@
 	<repositories>
 		<repository>
 			<id>my</id>
-			<url>file://${basedir}/my-repo</url>
+			<url>file://${basedir}/m2-repo</url>
 		</repository>
 	</repositories>
 	<dependencies>
