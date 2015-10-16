@@ -2,10 +2,8 @@ package com.wurmonline.mapgenerator.core.interpolator;
 
 public abstract class Interpolator {
 
-	private int scaleFactor;
-
-	public Interpolator(int scaleFactor) {
-		this.scaleFactor = scaleFactor;
+	public Interpolator() {
+		
 	}
 
 	public float[][] interpolate(float[][] input, int scale) {

@@ -15,8 +15,8 @@ public class BasicTests {
 	@Test
 	public void bilinearTests()
 	{
-		Interpolator linear = new BilinearInterpolator(2);
-		Interpolator cubic = new BicubicInterpolator(2,15);
+		Interpolator linear = new BilinearInterpolator();
+		Interpolator cubic = new BicubicInterpolator(15);
 		float[][] noise = new float[][]{{0.1f,0.2f,0.3f,0.2f},{0.1f,0.2f,0.3f,0.2f},{0.1f,0.2f,0.3f,0.2f},{0.1f,0.2f,0.3f,0.2f}};
 		System.out.println(Arrays.deepToString(noise).replace("], ", "]\n"));
 		interpolateAndPrint(noise,linear);

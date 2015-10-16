@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import com.wurmonline.mapgenerator.core.context.AppModule;
+
+@AppModule("image")
 public class ImageUtils {
 
-	public BufferedImage toGrayscale(float[][] input)
+	public BufferedImage grayscale(float[][] input)
 	{
 		BufferedImage result = new BufferedImage(
 	            input.length,

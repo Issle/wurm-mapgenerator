@@ -2,10 +2,7 @@ package com.wurmonline.mapgenerator.ui.ui;
 
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-import org.piccolo2d.extras.pswing.PSwing;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.nodes.PImage;
 
@@ -109,34 +105,25 @@ public class Window {
 		
 		JLabel outputLabel = new JLabel("Command output");
 		outputScrollPane.setColumnHeaderView(outputLabel);
-		
-		String imageFilePath = "/home/ipapaste/Downloads/nayt001.jpg";
-        PImage imageNode = new PImage(imageFilePath);
-        //PSwing swingWrapper = new PSwing(panel);
-        PSwingCanvas canvas = new PSwingCanvas();
-        canvas.getLayer().addChild(imageNode);
-	    splitPane.setLeftComponent(canvas);
 	}
 	
-	public void loadImage(String path)
+	public void load(String path)
 	{
         PImage imageNode = new PImage(path);
-        //PSwing swingWrapper = new PSwing(panel);
-        PSwingCanvas canvas = new PSwingCanvas();
-        canvas.getLayer().addChild(imageNode);
-	    splitPane.setLeftComponent(canvas);
-	    splitPane.updateUI();
-	    splitPane.repaint();
+        loadImpl(imageNode);
 	}
 	
-	public void loadImage(Image image)
+	public void load(Image image)
 	{
         PImage imageNode = new PImage(image);
-        //PSwing swingWrapper = new PSwing(panel);
-        PSwingCanvas canvas = new PSwingCanvas();
+        loadImpl(imageNode);
+	}
+	
+	private void loadImpl(PImage imageNode)
+	{
+		PSwingCanvas canvas = new PSwingCanvas();
         canvas.getLayer().addChild(imageNode);
 	    splitPane.setLeftComponent(canvas);
-	    splitPane.updateUI();
 	    splitPane.repaint();
 	}
 	

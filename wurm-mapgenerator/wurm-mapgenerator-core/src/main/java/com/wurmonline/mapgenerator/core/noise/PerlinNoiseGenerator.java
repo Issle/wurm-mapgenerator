@@ -1,6 +1,8 @@
 package com.wurmonline.mapgenerator.core.noise;
 
+import com.wurmonline.mapgenerator.core.context.AppModule;
 
+@AppModule("perlin")
 public class PerlinNoiseGenerator extends NoiseGenerator{
 	
 	private NoiseGenerator whiteNoise = new WhiteNoiseGenerator();

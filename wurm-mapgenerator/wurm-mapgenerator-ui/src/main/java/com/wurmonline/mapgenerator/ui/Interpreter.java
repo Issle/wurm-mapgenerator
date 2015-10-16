@@ -36,11 +36,8 @@ public class Interpreter {
 	
 	public void init()
 	{
-		System.out.println(exec("from com.wurmonline.mapgenerator.core.noise import PerlinNoiseGenerator;"));
-		System.out.println(exec("from com.wurmonline.mapgenerator.core.util import ImageUtils;"));
-		System.out.println(exec("imageUtil = ImageUtils()"));
 		System.out.println(exec("from com.wurmonline.mapgenerator.ui import Application;"));
-		System.out.println(exec("window = Application.window;"));
+		System.out.println(exec("ui = Application.window;"));
 	}
 	
 }

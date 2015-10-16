@@ -1,7 +1,12 @@
 package com.wurmonline.mapgenerator.core.util;
 
+import java.util.function.BiFunction;
+
+import com.wurmonline.mapgenerator.core.context.AppModule;
+
+@AppModule("math")
 public class MathUtils {
-	public static float[][] scale(float[][] noise, float scale)
+	public float[][] scale(float[][] noise, float scale)
 	{
 		for(int i =0; i < noise.length; i++)
 			for(int j = 0; j < noise[0].length; j++)
@@ -10,7 +15,7 @@ public class MathUtils {
 		return noise;
 	}
 	
-	public static float[][] normalize(float[][] noise)
+	public float[][] normalize(float[][] noise)
 	{
 		float biggestValue = 0;
 		for(float[] sub: noise)
@@ -28,7 +33,37 @@ public class MathUtils {
 		return noise;
 	}
 	
-	public static float[][] generateGradientMap(float[][] noise)
+	public float[][] operation(float[][] a1, float[][] a2, BiFunction<Float,Float,Float> function)
+	{
+		float[][] output = new float[a1.length][a2.length];
+		for(int x=0; x < a1.length; x++)
+			for(int y=0; y< a1.length; y++)
+				output[x][y] = function.apply(a1[x][y], a2[x][y]);
+		
+		return output;
+	}
+	
+	public float[][] sum(float[][] a1, float[][] a2)
+	{
+		return operation(a1,a2, (v1,v2)-> v1+v2);
+	}
+	
+	public float[][] sub(float[][] a1, float[][] a2)
+	{
+		return operation(a1,a2, (v1,v2)-> v1-v2);
+	}
+	
+	public float[][] mul(float[][] a1, float[][] a2)
+	{
+		return operation(a1,a2, (v1,v2)-> v1*v2);
+	}
+	
+	public float[][] div(float[][] a1, float[][] a2)
+	{
+		return operation(a1,a2, (v1,v2)-> v1/v2);
+	}
+	
+	public float[][] generateGradientMap(float[][] noise)
 	{
 		float[][] gradients = new float[noise.length][noise[0].length];
 		

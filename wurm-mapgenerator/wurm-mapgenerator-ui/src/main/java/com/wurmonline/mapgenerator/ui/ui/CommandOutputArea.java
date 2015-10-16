@@ -1,6 +1,7 @@
 package com.wurmonline.mapgenerator.ui.ui;
 
 import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
 public class CommandOutputArea extends JTextArea{
 
@@ -8,7 +9,8 @@ public class CommandOutputArea extends JTextArea{
 
 	public CommandOutputArea()
 	{
-		
+		DefaultCaret caret = (DefaultCaret) getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 	}
 	
 	public void append(String input, String output)

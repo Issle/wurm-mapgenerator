@@ -2,14 +2,21 @@ package com.wurmonline.mapgenerator.core.interpolator;
 
 import javax.media.jai.InterpolationBicubic;
 
+import com.wurmonline.mapgenerator.core.context.AppModule;
+
+@AppModule("bicubic")
 public class BicubicInterpolator extends Interpolator{
 
 	private InterpolationBicubic interpolation;
 	
-	public BicubicInterpolator(int scaleFactor,int bits)
+	public BicubicInterpolator(int bits)
 	{
-		super(scaleFactor);
 		interpolation = new InterpolationBicubic(bits);
+	}
+	
+	public BicubicInterpolator()
+	{
+		interpolation = new InterpolationBicubic(24);
 	}
 
 	@Override

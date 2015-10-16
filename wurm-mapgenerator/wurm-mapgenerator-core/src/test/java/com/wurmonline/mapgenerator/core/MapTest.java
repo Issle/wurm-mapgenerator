@@ -26,16 +26,17 @@ public class MapTest {
 
 	public static void main(String... args)
 	{
+		MathUtils utils = new MathUtils();
 		NoiseGenerator gen = new PerlinNoiseGenerator(0.5f,8,0);
 		float[][] noise = gen.generate(512, 512);
 		float[][] trees = gen.generate(1024, 1025);
 		//BicubicInterpolator inter = new BicubicInterpolator(8,32);
-		BilinearInterpolator inter = new BilinearInterpolator(2);
+		BilinearInterpolator inter = new BilinearInterpolator();
 		noise = inter.interpolate(noise,2);
 		Filter f = new SquareVignetteFilter();
 		f.filter(noise);
 		
-		float[][] grads = MathUtils.generateGradientMap(noise);
+		float[][] grads = utils.generateGradientMap(noise);
 		
 		float[][] rock = gen.generate(1024, 1024);
 		
@@ -85,7 +86,7 @@ public class MapTest {
 	                    {
 	                    	if(height < -200)
 	                    		height = -100;
-	                    	map.setRockHeight(i, i2, (short) (-200));
+	                    	
 	                    	map.setSurfaceTile(i, i2, Tile.TILE_DIRT, (short)height);
 	                    }
 	                    

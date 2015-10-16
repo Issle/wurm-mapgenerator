@@ -1,5 +1,8 @@
 package com.wurmonline.mapgenerator.core.noise;
 
+import com.wurmonline.mapgenerator.core.context.AppModule;
+
+@AppModule("none")
 public abstract class NoiseGenerator {
 
 	/**

@@ -7,10 +7,11 @@ public class Main {
 
 	public static void main(String... args)
 	{
+		MathUtils utils = new MathUtils();
 		PerlinNoiseGenerator gen = new PerlinNoiseGenerator(0.6f,8,256);
 		float[][] map = gen.generate(512,512);
-		float[][] normMap = MathUtils.normalize(map);
-	    float[][] gradients = MathUtils.normalize(MathUtils.generateGradientMap(normMap));
+		float[][] normMap = utils.normalize(map);
+	    float[][] gradients = utils.normalize(utils.generateGradientMap(normMap));
 	    //Map mapObject = new Map(map,gradients);
 		//mapObject.render();
 	    //Game.render(map, "map");
