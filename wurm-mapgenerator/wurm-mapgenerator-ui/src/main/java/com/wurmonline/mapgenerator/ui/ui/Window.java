@@ -16,7 +16,10 @@ import javax.swing.JSplitPane;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.nodes.PImage;
 
+import com.wurmonline.mapgenerator.core.util.ImageUtils;
+import com.wurmonline.mapgenerator.core.util.MathUtils;
 import com.wurmonline.mapgenerator.ui.Interpreter;
+import com.wurmonline.mapgenerator.ui.Map;
 
 public class Window {
 
@@ -25,6 +28,10 @@ public class Window {
 	private CommandInputArea input;
 	private Interpreter interpreter;
 	private JSplitPane splitPane;
+	private PSwingCanvas canvas;
+	
+	private ImageUtils utils = new ImageUtils();
+	private MathUtils mutils = new MathUtils();
 	
 	public Window(Interpreter interpreter) {
 		this.interpreter = interpreter;
@@ -38,7 +45,6 @@ public class Window {
 	
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 900, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(1, 1, 0, 0));
 		
@@ -62,7 +68,7 @@ public class Window {
 		file.add(exit);
 		
 		splitPane = new JSplitPane();
-		splitPane.setResizeWeight(0.8f);
+		splitPane.setResizeWeight(0.65f);
 		frame.getContentPane().add(splitPane);
 		
 		JPanel interaction = new JPanel();
@@ -95,7 +101,7 @@ public class Window {
 		
 		JButton btnEval = new EvalButton("Eval",input,output,interpreter);
 		inputSplitPane.setRightComponent(btnEval);
-		inputSplitPane.setResizeWeight(0.8f);
+		inputSplitPane.setResizeWeight(0.95f);
 		
 		JScrollPane outputScrollPane = new JScrollPane();
 		interactionSplitPane.setLeftComponent(outputScrollPane);
@@ -105,6 +111,9 @@ public class Window {
 		
 		JLabel outputLabel = new JLabel("Command output");
 		outputScrollPane.setColumnHeaderView(outputLabel);
+		
+		canvas = new PSwingCanvas();
+		splitPane.setLeftComponent(canvas);
 	}
 	
 	public void load(String path)
@@ -119,12 +128,22 @@ public class Window {
         loadImpl(imageNode);
 	}
 	
+	public void load(float[][] map)
+	{
+		float[][] output = mutils.normalize(map);
+		load(utils.grayscale(output));
+	}
+	
+	public void load(Map map)
+	{
+		load(map.dump());
+	}
+	
 	private void loadImpl(PImage imageNode)
 	{
-		PSwingCanvas canvas = new PSwingCanvas();
+		canvas.getLayer().removeAllChildren();
         canvas.getLayer().addChild(imageNode);
-	    splitPane.setLeftComponent(canvas);
-	    splitPane.repaint();
+	    canvas.repaint();
 	}
 	
 }

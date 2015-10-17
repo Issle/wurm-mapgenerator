@@ -63,6 +63,16 @@ public class MathUtils {
 		return operation(a1,a2, (v1,v2)-> v1/v2);
 	}
 	
+	public float[][] copy(float[][] input)
+	{
+		float[][] output = new float[input.length][input[0].length];
+		
+		for(int x=0; x < input.length; x++)
+			for(int y=0; y< input.length; y++)
+				output[x][y] = input[x][y];
+		return output;
+	}
+	
 	public float[][] generateGradientMap(float[][] noise)
 	{
 		float[][] gradients = new float[noise.length][noise[0].length];

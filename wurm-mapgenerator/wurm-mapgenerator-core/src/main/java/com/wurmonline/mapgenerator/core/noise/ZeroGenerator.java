@@ -13,8 +13,8 @@ public class ZeroGenerator extends NoiseGenerator{
 	}
 	
 	@Override
-	public float[][] generateImpl(int width, int height) {
-		return generator.generate(width, height);
+	public float[][] generateImpl(int size) {
+		return generator.generate(size);
 	}
 
 }

@@ -9,10 +9,10 @@ public class WhiteNoiseGenerator extends NoiseGenerator{
 
 	private Random random = new Random();
 	
-	public float[][] generateImpl(int width, int height) {
-		float[][] noise = new float[width][height];
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {	
+	public float[][] generateImpl(int size) {
+		float[][] noise = new float[size][size];
+		for (int y = 0; y < size; y++) {
+			for (int x = 0; x < size; x++) {	
 				noise[x][y] = random.nextFloat();
 			}
 		}

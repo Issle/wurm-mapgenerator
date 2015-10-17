@@ -86,8 +86,8 @@ public class PerlinNoiseGenerator extends NoiseGenerator{
 		return perlinNoise;
 	}
 
-	public float[][] generateImpl(int width, int height) {
-		float[][] baseNoise = whiteNoise.generate(width, height);
+	public float[][] generateImpl(int size) {
+		float[][] baseNoise = whiteNoise.generate(size);
 		return generatePerlinNoise(baseNoise, octaveCount);
 	}
 	

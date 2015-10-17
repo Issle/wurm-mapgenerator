@@ -28,8 +28,8 @@ public class MapTest {
 	{
 		MathUtils utils = new MathUtils();
 		NoiseGenerator gen = new PerlinNoiseGenerator(0.5f,8,0);
-		float[][] noise = gen.generate(512, 512);
-		float[][] trees = gen.generate(1024, 1025);
+		float[][] noise = gen.generate(512);
+		float[][] trees = gen.generate(1024);
 		//BicubicInterpolator inter = new BicubicInterpolator(8,32);
 		BilinearInterpolator inter = new BilinearInterpolator();
 		noise = inter.interpolate(noise,2);
@@ -38,7 +38,7 @@ public class MapTest {
 		
 		float[][] grads = utils.generateGradientMap(noise);
 		
-		float[][] rock = gen.generate(1024, 1024);
+		float[][] rock = gen.generate(1024);
 		
 		 WurmAPI api;
 	        try {

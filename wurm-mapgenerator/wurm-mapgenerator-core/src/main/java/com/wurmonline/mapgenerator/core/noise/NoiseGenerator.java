@@ -11,10 +11,10 @@ public abstract class NoiseGenerator {
 	 * @param height
 	 * @return
 	 */
-	public float[][] generate(int width, int height)
+	public float[][] generate(int size)
 	{
-		assertPreconditions(width,height);
-		return generateImpl(width,height);
+		assertPreconditions(size);
+		return generateImpl(size);
 	}
 	
 	/**
@@ -25,9 +25,9 @@ public abstract class NoiseGenerator {
 	 */
 	public float[][] generateSquarePowTwo(int size)
 	{
-		assertPreconditions(size,size);
+		assertPreconditions(size);
 		assertIsPowTwo(size);
-		return generateImpl(size,size);
+		return generateImpl(size);
 	}
 	
 	/**
@@ -36,17 +36,17 @@ public abstract class NoiseGenerator {
 	 * @param height
 	 * @return
 	 */
-	public abstract float[][] generateImpl(int width, int height);
+	public abstract float[][] generateImpl(int size);
 	
 	/**
 	 * General precondition checks.
 	 * @param width
 	 * @param height
 	 */
-	public void assertPreconditions(int width, int height)
+	public void assertPreconditions(int size)
 	{
-		if(width <0 || height <0)
-			throw new RuntimeException("A negative size matrix is not allowed. Width: "+width +" Height:"+height);
+		if(size<0)
+			throw new RuntimeException("A negative size matrix is not allowed. Size:"+size);
 	}
 	
 	public void assertIsPowTwo(int value)
