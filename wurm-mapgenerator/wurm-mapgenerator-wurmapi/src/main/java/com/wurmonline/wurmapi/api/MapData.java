@@ -7,6 +7,7 @@ import com.wurmonline.mesh.MeshIO;
 import com.wurmonline.mesh.Tiles;
 import com.wurmonline.mesh.Tiles.Tile;
 import com.wurmonline.mesh.TreeData.TreeType;
+import com.wurmonline.wurmapi.internal.CaveColors;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -194,6 +195,10 @@ public final class MapData {
     }
     
     private void setSurfaceTile(int x, int y, Tile tileType, short height, byte data) {
+        if (tileType == null) {
+            tileType = Tile.TILE_DIRT;
+        }
+        
         surfaceMesh.setTile(x, y, Tiles.encode(height, (byte) tileType.getId(), data));
     }
     
@@ -357,7 +362,25 @@ public final class MapData {
      * @return cave tile type in location.
      */
     public Tile getCaveTile(int x, int y) {
-        return Tiles.getTile(Tiles.decodeType(surfaceMesh.getTile(x, y)));
+        return Tiles.getTile(Tiles.decodeType(caveMesh.getTile(x, y)));
+    }
+    
+    /**
+     * Sets tile data inside cave.<br>
+     * Only solid cave walls are allowed - exception will be thrown on attempt to set non-cave tile type or cave type which is not a wall.<br>
+     * This method sets default values for resource counts: 51 for rock tiles and 1000 for veins.
+     * 
+     * @param x x location in game world.
+     * @param y y location in game world.
+     * @param tileType type of tile. Only cave walls constants are allowed.
+     */
+    public void setCaveTile(int x, int y, Tile tileType) {
+        if (tileType == Tile.TILE_CAVE_WALL) {
+            setCaveTile(x, y, tileType, (short) 51);
+        }
+        else {
+            setCaveTile(x, y, tileType, (short) 1000);
+        }
     }
     
     /**
@@ -367,8 +390,9 @@ public final class MapData {
      * @param x x location in game world.
      * @param y y location in game world.
      * @param tileType type of tile. Only cave walls constants are allowed.
+     * @param resourceCount number of mining actions needed to deplete vein. Must be higher than 0.
      */
-    public void setCaveTile(int x, int y, Tile tileType) {
+    public void setCaveTile(int x, int y, Tile tileType, short resourceCount) {
         if (tileType == null || !tileType.isCave()) {
             throw new IllegalArgumentException("Tile type is null");
         }
@@ -379,11 +403,39 @@ public final class MapData {
             throw new IllegalArgumentException("Tile type is invalid cave type: "+tileType.toString());
         }
         
-        setCaveTile(x, y, tileType, (short) 0, (byte) 0);
+        setCaveResourceCount(x, y, resourceCount);
+        setCaveTile(x, y, tileType, (short) -100, (byte) 0);
     }
     
     private void setCaveTile(int x, int y, Tile tileType, short height, byte data) {
         caveMesh.setTile(x, y, Tiles.encode(height, (byte) tileType.getId(), data));
+    }
+    
+    /**
+     * @param x x location in game world.
+     * @param y y location in game world.
+     * @return number of mining actions needed to deplete vein.
+     */
+    public short getCaveResourceCount(int x, int y) {
+        final int value = resourcesMesh.getTile(x, y);
+        final int toReturn = (value >> 16) & 0xFFFF;
+        return (short) toReturn;
+    }
+    
+    /**
+     * Sets number of mining actions needed to deplete vein in current location (rock tiles count as veins as well).
+     * 
+     * @param x x location in game world.
+     * @param y y location in game world.
+     * @param resourceCount number of mining actions needed to deplete vein. Must be higher than 0.
+     */
+    public void setCaveResourceCount(int x, int y, short resourceCount) {
+        if (resourceCount <= 0) {
+            throw new IllegalArgumentException("Invalid amount of resources in cave tile: "+resourceCount+", must be higher than 0");
+        }
+        
+        final int value = resourcesMesh.getTile(x, y);
+        resourcesMesh.setTile(x, y, ((resourceCount & 0xFFFF) << 16) + (value & 0xFFFF));
     }
     
     /**
@@ -482,6 +534,38 @@ public final class MapData {
      * @return map image
      */
     public BufferedImage createTerrainDump(boolean showWater) {
+        return createFlatDump(true, showWater);
+    }
+    
+    /**
+     * Creates flat map dump, showing all cave terrain types in different colors.<br>
+     * You don't need to save map first to create updated map dump - it is using data from memory.
+     * 
+     * @param showWater set true if you want to make water visible, false otherwise.
+     * @param tiles ore types to show on cave dump (all will be shown if not specified or null)
+     * @return map image
+     */
+    public BufferedImage createCaveDump(boolean showWater, Tile... tiles) {
+        return createFlatDump(false, showWater, tiles);
+    }
+    
+    private BufferedImage createFlatDump(boolean isSurface, boolean showWater, Tile... allowedTiles) {
+        final MeshIO terrainMesh;
+        if (isSurface) {
+            terrainMesh = surfaceMesh;
+        }
+        else {
+            terrainMesh = caveMesh;
+        }
+        
+        final MeshIO heightMesh;
+        if (isSurface) {
+            heightMesh = surfaceMesh;
+        }
+        else {
+            heightMesh = rockMesh;
+        }
+        
         int lWidth = 16384;
         if (lWidth > getWidth())
             lWidth = getWidth();
@@ -503,16 +587,40 @@ public final class MapData {
         
         for (int x = 0; x < lWidth; x++) {
             for (int y = lWidth - 1; y >= 0; y--) {
-                final short height = Tiles.decodeHeight(surfaceMesh.getTile(x + xo, y + yo));
-                final byte tex = Tiles.decodeType(surfaceMesh.getTile(x + xo, y + yo));
-
+                final short height = Tiles.decodeHeight(heightMesh.getTile(x + xo, y + yo));
+                final byte tex = Tiles.decodeType(terrainMesh.getTile(x + xo, y + yo));
                 final Tile tile = Tiles.getTile(tex);
+                boolean visible = true;
+                
+                if (allowedTiles != null && allowedTiles.length > 0) {
+                    visible = false;
+                    for (int i = 0; i< allowedTiles.length; i++) {
+                        if (allowedTiles[i] == tile) {
+                            visible = true;
+                            break;
+                        }
+                    }
+                }
+
                 final Color color;
                 if (tile != null) {
-                    color = tile.getColor();
+                    if (isSurface) {
+                        color = tile.getColor();
+                    }
+                    else if (visible) {
+                        color = CaveColors.getColorFor(tile);
+                    }
+                    else {
+                        color = CaveColors.getColorFor(Tile.TILE_CAVE_WALL);
+                    }
                 }
                 else {
-                    color = Tile.TILE_DIRT.getColor();
+                    if (isSurface) {
+                        color = Tile.TILE_DIRT.getColor();
+                    }
+                    else {
+                        color = CaveColors.getColorFor(Tile.TILE_CAVE);
+                    }
                 }
                 int r = color.getRed();
                 int g = color.getGreen();

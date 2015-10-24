@@ -33,15 +33,18 @@ For standard thermal erosion, use erodeThermal(float talus-angle, int iterations
 
 package com.oddlabs.procedurality;
 
+import java.util.Random;
+
 public final class ExampleTerrain {
 	
 	public final static void main(String[] args) {
 		
+		Random random = new Random();
 		// parameters
 		int size = 1024; // image size
-		int seed = 42; // random seed
-		int features = 4; // frequency of mountainpeaks [1...size]
-		float hills = 0.5f; // overall roughness of the terrain [0f...1f]
+		int seed = random.nextInt(); // random seed
+		int features = 1; // frequency of mountainpeaks [1...size]
+		float hills = 0.1f; // overall roughness of the terrain [0f...1f]
 		
 		// start off with some noise
 		Channel height = new Mountain(size, Utils.powerOf2Log2(size) - 6, 0.5f, seed).toChannel();

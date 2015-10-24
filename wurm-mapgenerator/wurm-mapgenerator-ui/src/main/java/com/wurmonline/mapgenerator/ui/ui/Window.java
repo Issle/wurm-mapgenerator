@@ -16,6 +16,7 @@ import javax.swing.JSplitPane;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.nodes.PImage;
 
+import com.oddlabs.procedurality.Channel;
 import com.wurmonline.mapgenerator.core.util.ImageUtils;
 import com.wurmonline.mapgenerator.core.util.MathUtils;
 import com.wurmonline.mapgenerator.ui.Interpreter;
@@ -137,6 +138,11 @@ public class Window {
 	public void load(Map map)
 	{
 		load(map.dump());
+	}
+	
+	public void load(Channel channel)
+	{
+		load(utils.grayscale(channel.getPixels()));
 	}
 	
 	private void loadImpl(PImage imageNode)

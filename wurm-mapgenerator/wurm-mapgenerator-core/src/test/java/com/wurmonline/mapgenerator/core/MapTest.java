@@ -36,7 +36,7 @@ public class MapTest {
 		Filter f = new SquareVignetteFilter();
 		f.filter(noise);
 		
-		float[][] grads = utils.generateGradientMap(noise);
+		float[][] grads = utils.grads(noise);
 		
 		float[][] rock = gen.generate(1024);
 		

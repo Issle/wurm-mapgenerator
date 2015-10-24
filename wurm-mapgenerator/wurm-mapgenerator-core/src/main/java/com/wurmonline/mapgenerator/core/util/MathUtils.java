@@ -53,6 +53,15 @@ public class MathUtils {
 		return operation(a1,a2, (v1,v2)-> v1-v2);
 	}
 	
+	public float[][] invert(float[][] input)
+	{
+		float[][] result = new float[input.length][input.length];
+		for(int x=0; x < input.length; x++)
+			for(int y=0; y< input.length; y++)
+				result[x][y] = 1-input[x][y];
+		return result;
+	}
+	
 	public float[][] mul(float[][] a1, float[][] a2)
 	{
 		return operation(a1,a2, (v1,v2)-> v1*v2);
@@ -61,6 +70,39 @@ public class MathUtils {
 	public float[][] div(float[][] a1, float[][] a2)
 	{
 		return operation(a1,a2, (v1,v2)-> v1/v2);
+	}
+
+	public float[][] sub(float[][] input, float value)
+	{
+		float[][] output = new float[input.length][input[0].length];
+		
+		for(int x=0; x < input.length; x++)
+			for(int y=0; y< input.length; y++)
+				output[x][y] = input[x][y] - value;
+		return output;
+	}
+	
+	public float[][] cut(float[][] input, float value)
+	{
+		float[][] output = new float[input.length][input[0].length];
+		
+		for(int x=0; x < input.length; x++)
+			for(int y=0; y< input.length; y++)
+				if(input[x][y] < value)
+					output[x][y] = value;
+				else
+					output[x][y] = input[x][y];
+		return output;
+	}
+	
+	public float[][] mul(float[][] input, float value)
+	{
+		float[][] output = new float[input.length][input[0].length];
+		
+		for(int x=0; x < input.length; x++)
+			for(int y=0; y< input.length; y++)
+				output[x][y] = input[x][y]*value;
+		return output;
 	}
 	
 	public float[][] copy(float[][] input)
@@ -73,7 +115,7 @@ public class MathUtils {
 		return output;
 	}
 	
-	public float[][] generateGradientMap(float[][] noise)
+	public float[][] grads(float[][] noise)
 	{
 		float[][] gradients = new float[noise.length][noise[0].length];
 		

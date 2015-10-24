@@ -39,6 +39,11 @@ public class Interpreter {
 		exec("from com.wurmonline.mapgenerator.ui import Application;");
 		exec("ui = Application.window;");
 		exec("from com.wurmonline.mesh.Tiles import Tile");
+		exec("from com.wurmonline.mesh.TreeData import TreeType");
+		exec("from com.wurmonline.mesh import FoliageAge");
+		exec("from com.wurmonline.mesh.GrassData import GrowthTreeStage");
+		exec("from com.oddlabs.procedurality import Channel");
+		
 	}
 	
 }

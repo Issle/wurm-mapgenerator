@@ -39,6 +39,14 @@ public final strictfp class Channel {
 		this.height = height;
 		this.powerof2 = Utils.isPowerOf2(width) && Utils.isPowerOf2(height);
 	}
+	
+	public Channel(float[][] noise)
+	{
+		this.pixels = noise;
+		this.width = noise.length;
+		this.height = noise.length;
+		this.powerof2 = Utils.isPowerOf2(width) && Utils.isPowerOf2(height);
+	}
 
 	public final Layer toLayer() {
 		return new Layer(this.copy(), this.copy(), this.copy());
